@@ -3,12 +3,17 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>title</title>
+    <title>Temperatuursensor uitmeten</title>
 </head>
 
 <body>
-    <h1>test Ws mqtt.js</h1>
+    <h1>Uitmeten temperatuursensor</h1>
     <script src="./browserMqtt.js"></script>
+    <script src="/home/pi/test3/nodejs-express-mqtt/index.js"></script>
+    <script src="https://www.rgraph.net/libraries/RGraph.common.core.js"></script>
+    <script src="https://www.rgraph.net/libraries/RGraph.common.dynamic.js"></script>
+    <script src="https://www.rgraph.net/libraries/RGraph.common.tooltips.js"></script>
+    <script src="https://www.rgraph.net/libraries/RGraph.thermometer.js"></script>
     <script>
         const client = mqtt.connect("ws://localhost:9001") // you add a ws:// url here
         client.subscribe("mqtt/demo")
@@ -18,8 +23,35 @@
             client.end()
         })
 
-        client.publish("mqtt/demo", "hello world!")
+
+        client.publish("mqtt/demo", "Temperatuur:")
+    </script>      
+        
+    <canvas id="cvs" width="150" height="500"></canvas>
+    <script>
+
+        new RGraph.Thermometer({
+            id: 'cvs',
+            min: 0,
+            max: 100,
+            value: 22,
+            options: {
+                marginLeft: 45,
+                marginRight: 45,
+                colors: ['blue'],
+                tooltips: '<span style="font-size: 14pt">Todays temperature</span><br/>%{key}',
+                tooltipsFormattedKeyLabels: ['London'],
+                tooltipsFormattedUnitsPost: '°',
+                tooltipsCss: {
+                    fontSize: '18pt',
+                    textAlign: 'left'
+                },
+                textAccessible: true
+            }
+        }).draw();
     </script>
+
+<canvas id="cvs" width="150" height="500"></canvas>
 </body>
 
 </html>
